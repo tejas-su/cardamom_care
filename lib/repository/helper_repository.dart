@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:flutter_tensorflow_lite/flutter_tensorflow_lite.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tflite_v2/tflite_v2.dart';
-
 import '../models/classify_model.dart';
 
 ///Includes functions related to tflite and
@@ -40,7 +39,11 @@ class HelperRepository {
   /// This function  grabs the image from camera
   Future<ClassifyModel> pickImage() async {
     try {
-      var image = await ImagePicker().pickImage(source: ImageSource.camera);
+      var image = await ImagePicker().pickImage(
+          source: ImageSource.camera,
+          maxHeight: 500,
+          imageQuality: 80,
+          preferredCameraDevice: CameraDevice.rear);
       if (image == null) {
         throw Exception('Something went wrong while parsing the image');
       }
@@ -76,5 +79,9 @@ class HelperRepository {
     } catch (e) {
       throw Exception(e.toString());
     }
+  }
+
+  closeModel() async {
+    await Tflite.close();
   }
 }

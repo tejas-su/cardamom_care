@@ -7,6 +7,6 @@ abstract class ClassifyEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class OnTakePhotoEvent extends ClassifyEvent {}
-
 class OnSelectPhotoEvent extends ClassifyEvent {}
+
+class OnRefreshEvent extends ClassifyEvent {}

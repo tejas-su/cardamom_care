@@ -13,7 +13,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List screens = [
-      const GalleryScreen(),
+      GalleryScreen(
+        cameraDescription: cameraDescription,
+      ),
       CameraScreen(
         cameraDescription: cameraDescription,
       ),

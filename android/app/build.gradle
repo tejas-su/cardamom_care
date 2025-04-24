@@ -24,10 +24,17 @@ android {
         applicationId = "com.example.cardamom_care"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+       // minSdk = flutter.minSdkVersion
+       minSdkVersion 23
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+    }
+
+    dependencies {
+            implementation 'org.tensorflow:tensorflow-lite:2.9.0'
+            implementation 'org.tensorflow:tensorflow-lite-gpu:2.9.0'
+
     }
 
     aaptOptions {

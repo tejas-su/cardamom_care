@@ -1,117 +1,82 @@
+import 'package:camera/camera.dart';
+import 'package:cardamom_care/widgets/file_upload.dart';
+import 'package:cardamom_care/widgets/results.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/classify_bloc/classify_bloc.dart';
 
 class GalleryScreen extends StatelessWidget {
-  const GalleryScreen({super.key});
+  final CameraDescription cameraDescription;
+  const GalleryScreen({super.key, required this.cameraDescription});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: BlocBuilder<ClassifyBloc, ClassifyState>(
+        builder: (context, state) {
+          return switch (state) {
+            ClassifyInitialState() => SizedBox.shrink(),
+            ClassifyingState() => SizedBox.shrink(),
+            ClassifiedState() => FloatingActionButton(
+                onPressed: () =>
+                    context.read<ClassifyBloc>().add(OnRefreshEvent()),
+                backgroundColor: Colors.green.shade100,
+                elevation: 0,
+                child: Icon(Icons.refresh),
+              ),
+            ErrorState() => FloatingActionButton(
+                onPressed: () =>
+                    context.read<ClassifyBloc>().add(OnRefreshEvent()),
+                backgroundColor: Colors.green.shade100,
+                elevation: 0,
+                child: Icon(Icons.refresh),
+              ),
+          };
+        },
+      ),
       body: Column(
         children: [
           BlocBuilder<ClassifyBloc, ClassifyState>(
             builder: (context, state) {
-              if (state is ClassifyInitial) {
-                return Expanded(
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        'Please select an image from the gallery or take a photo !',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w400),
+              return switch (state) {
+                //Initial state: ask the user to either upload the image or take a photo
+                ClassifyInitialState() => Expanded(
+                    child: FileUpload(
+                      onTap: () => context
+                          .read<ClassifyBloc>()
+                          .add(OnSelectPhotoEvent()),
+                    ),
+                  ),
+                //Show a loading animation when the image is being classified
+                ClassifyingState() =>
+                  Center(child: CircularProgressIndicator()),
+                //Results: show the image and the confidence score
+                ClassifiedState() => Results(
+                    file: state.classifyModel.file!,
+                    label: (state.classifyModel.output?.isNotEmpty ?? false)
+                        ? state.classifyModel.output![0]['label']
+                        : 'No result',
+                    confidence:
+                        (state.classifyModel.output?.isNotEmpty ?? false)
+                            ? state.classifyModel.output![0]['confidence']
+                            : 0,
+                  ),
+                //Display the error message if something goes wrong
+                ErrorState() => Expanded(
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Text(
+                          textAlign: TextAlign.center,
+                          'Something went wrong',
+                          style: TextStyle(fontSize: 20),
+                        ),
                       ),
                     ),
                   ),
-                );
-              }
-              if (state is ClassifyingState) {
-                return Center(child: CircularProgressIndicator());
-              }
-              if (state is ClassifiedState) {
-                double confidence =
-                    state.classifyModel.output![0]['confidence'];
-                double roundedConfidenceValue =
-                    double.parse(confidence.toStringAsFixed(2));
-                return Expanded(
-                  child: ListView(shrinkWrap: true, children: [
-                    Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          children: [
-                            Image.file(state.classifyModel.file!),
-                            ListTile(
-                              title: Text(
-                                state.classifyModel.output![0]['label']
-                                    .toString(),
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w500),
-                              ),
-                              trailing: Text(
-                                '$roundedConfidenceValue',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w500),
-                              ),
-                            )
-                          ],
-                        ))
-                  ]),
-                );
-              }
-              if (state is Errorstate) {
-                return Expanded(
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        state.errormessage,
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
-                  ),
-                );
-              }
-              return SizedBox();
+              };
             },
           ),
-          //Buttons for choosing fromt the gallery or take a picture
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              FloatingActionButton.extended(
-                heroTag: 'Open Camera',
-                backgroundColor: Colors.green.shade100,
-                elevation: 0,
-                icon: const Icon(
-                  Icons.camera,
-                  size: 24,
-                ),
-                onPressed: () =>
-                    context.read<ClassifyBloc>().add(OnTakePhotoEvent()),
-                label: const Text('Take a photo'),
-              ),
-              //Pick from gallery
-              FloatingActionButton.extended(
-                heroTag: 'Open Gallery',
-                backgroundColor: Colors.green.shade100,
-                elevation: 0,
-                icon: const Icon(
-                  Icons.image,
-                  size: 24,
-                ),
-                onPressed: () =>
-                    context.read<ClassifyBloc>().add(OnSelectPhotoEvent()),
-                label: const Text('Select a photo'),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          )
         ],
       ),
     );

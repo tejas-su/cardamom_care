@@ -12,9 +12,13 @@ class LiveAnalysisBloc extends Bloc<LiveAnalysisEvent, LiveAnalysisState> {
     on<LiveAnalysisEvent>((event, emit) async {
       emit(ClassifyingState());
       try {
-        ClassifyModel output =
-            await helperRepository.liveImageClassification(event.imagePath!);
-        emit(ClassifiedState(classifyModel: output));
+        if (event.imagePath == null) {
+          return;
+        } else {
+          ClassifyModel output = await helperRepository
+              .liveImageClassification(event.imagePath.toString());
+          emit(ClassifiedState(classifyModel: output));
+        }
       } catch (e) {
         emit(ClassificationErrorState(errorMessage: e.toString()));
       }

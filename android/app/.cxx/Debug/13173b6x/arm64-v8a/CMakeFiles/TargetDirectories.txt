@@ -1,0 +1,2 @@
+G:/Flutter projects/cardamom_care/android/app/.cxx/Debug/13173b6x/arm64-v8a/CMakeFiles/edit_cache.dir
+G:/Flutter projects/cardamom_care/android/app/.cxx/Debug/13173b6x/arm64-v8a/CMakeFiles/rebuild_cache.dir

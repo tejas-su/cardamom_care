@@ -1,17 +1,17 @@
 part of 'classify_bloc.dart';
 
-abstract class ClassifyState extends Equatable {
+sealed class ClassifyState extends Equatable {
   const ClassifyState();
 
   @override
   List<Object> get props => [];
 }
 
-class ClassifyInitial extends ClassifyState {}
+final class ClassifyInitialState extends ClassifyState {}
 
-class ClassifyingState extends ClassifyState {}
+final class ClassifyingState extends ClassifyState {}
 
-class ClassifiedState extends ClassifyState {
+final class ClassifiedState extends ClassifyState {
   final ClassifyModel classifyModel;
 
   const ClassifiedState({required this.classifyModel});
@@ -20,10 +20,10 @@ class ClassifiedState extends ClassifyState {
   List<Object> get props => [classifyModel];
 }
 
-class Errorstate extends ClassifyState {
+final class ErrorState extends ClassifyState {
   final String errormessage;
 
-  const Errorstate({required this.errormessage});
+  const ErrorState({required this.errormessage});
 
   @override
   List<Object> get props => [errormessage];

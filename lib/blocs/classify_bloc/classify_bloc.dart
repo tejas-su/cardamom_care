@@ -7,14 +7,10 @@ part 'classify_state.dart';
 
 class ClassifyBloc extends Bloc<ClassifyEvent, ClassifyState> {
   final HelperRepository helperRepository;
-  ClassifyBloc({required this.helperRepository}) : super(ClassifyInitial()) {
-    on<OnTakePhotoEvent>((event, emit) async {
-      try {
-        ClassifyModel output = await helperRepository.pickImage();
-        emit(ClassifiedState(classifyModel: output));
-      } catch (e) {
-        emit(Errorstate(errormessage: e.toString()));
-      }
+  ClassifyBloc({required this.helperRepository})
+      : super(ClassifyInitialState()) {
+    on<OnRefreshEvent>((event, emit) async {
+      emit(ClassifyInitialState());
     });
 
     on<OnSelectPhotoEvent>(
@@ -22,8 +18,8 @@ class ClassifyBloc extends Bloc<ClassifyEvent, ClassifyState> {
         try {
           ClassifyModel output = await helperRepository.pickGalleryImage();
           emit(ClassifiedState(classifyModel: output));
-        } catch (e) {
-          emit(Errorstate(errormessage: e.toString()));
+        } catch (e) { 
+          emit(ErrorState(errormessage: e.toString()));
         }
       },
     );

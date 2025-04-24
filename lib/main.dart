@@ -5,7 +5,7 @@ import 'blocs/classify_bloc/classify_bloc.dart';
 import 'blocs/live_analysis_bloc/live_analysis_bloc.dart';
 import 'cubit/navigation_cubit.dart';
 import 'repository/helper_repository.dart';
-import 'screens/loading_Screen.dart';
+import 'screens/loading_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
