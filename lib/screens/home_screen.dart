@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
       CameraScreen(
         cameraDescription: cameraDescription,
       ),
-      const Price(),
+      const PricePredictionScreen(),
       const VisualizationScreen(),
     ];
     return Scaffold(body: BlocBuilder<NavigationCubit, int>(

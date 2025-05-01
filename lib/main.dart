@@ -1,4 +1,6 @@
 import 'package:camera/camera.dart';
+import 'package:cardamom_care/blocs/web_view_bloc/web_view_bloc.dart';
+import 'package:cardamom_care/blocs/web_view_bloc/web_view_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'blocs/classify_bloc/classify_bloc.dart';
@@ -23,7 +25,8 @@ void main() async {
             create: (context) => LiveAnalysisBloc(
                   helperRepository:
                       HelperRepository(cameraDescription: cameraDescription),
-                ))
+                )),
+        BlocProvider(create: (context) => WebViewBloc()..add(WebViewLoadEvent()))
       ],
       child: MyApp(
         cameraDescription: cameraDescription,
