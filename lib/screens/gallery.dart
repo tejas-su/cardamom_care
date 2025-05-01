@@ -12,27 +12,42 @@ class GalleryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: BlocBuilder<ClassifyBloc, ClassifyState>(
-        builder: (context, state) {
-          return switch (state) {
-            ClassifyInitialState() => SizedBox.shrink(),
-            ClassifyingState() => SizedBox.shrink(),
-            ClassifiedState() => FloatingActionButton(
-                onPressed: () =>
-                    context.read<ClassifyBloc>().add(OnRefreshEvent()),
-                backgroundColor: Colors.green.shade100,
-                elevation: 0,
-                child: Icon(Icons.refresh),
+      appBar: AppBar(
+        backgroundColor: Colors.green.shade100,
+        title: const Text(
+          'CardamomCare',
+          style: TextStyle(fontWeight: FontWeight.w500),
+        ),
+        actions: [
+          Builder(builder: (context) {
+            return IconButton(
+              onPressed: () => Scaffold.of(context).openEndDrawer(),
+              icon: const Icon(Icons.info_outline_rounded),
+            );
+          })
+        ],
+      ),
+      endDrawer: Drawer(
+        shape: const Border(),
+        width: MediaQuery.sizeOf(context).width,
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Powered By'),
+            Image(
+              image: AssetImage('assets/images/tfl_logo.png'),
+              color: Colors.black,
+            ),
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Text(
+                '@tejas-su @abhay_prabhu @jyothis @dayanand_shenoy',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.black26),
               ),
-            ErrorState() => FloatingActionButton(
-                onPressed: () =>
-                    context.read<ClassifyBloc>().add(OnRefreshEvent()),
-                backgroundColor: Colors.green.shade100,
-                elevation: 0,
-                child: Icon(Icons.refresh),
-              ),
-          };
-        },
+            ),
+          ],
+        ),
       ),
       body: Column(
         children: [
@@ -66,10 +81,21 @@ class GalleryScreen extends StatelessWidget {
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.all(20.0),
-                        child: Text(
-                          textAlign: TextAlign.center,
-                          'Something went wrong',
-                          style: TextStyle(fontSize: 20),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              textAlign: TextAlign.center,
+                              'Something went wrong',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            SizedBox(height: 10),
+                            IconButton(
+                                onPressed: () => context
+                                    .read<ClassifyBloc>()
+                                    .add(OnRefreshEvent()),
+                                icon: Icon(Icons.refresh_rounded))
+                          ],
                         ),
                       ),
                     ),

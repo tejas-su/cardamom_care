@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:cardamom_care/blocs/classify_bloc/classify_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Results extends StatelessWidget {
   final File file;
@@ -21,6 +23,18 @@ class Results extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             child: Column(
               children: [
+                SizedBox(
+                    height: 55,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            onPressed: () => context
+                                .read<ClassifyBloc>()
+                                .add(OnRefreshEvent()),
+                            icon: Icon(Icons.close),
+                          )
+                        ])),
                 SizedBox(height: 560, child: Image.file(file)),
                 ListTile(
                   title: Text(

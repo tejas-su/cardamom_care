@@ -20,8 +20,8 @@ class _CameraScreenState extends State<CameraScreen> {
 
   @override
   void initState() {
-    super.initState();
     _initializeControllerFuture = _initializeCamera();
+    super.initState();
   }
 
   Future<void> _initializeCamera() async {
@@ -72,8 +72,51 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   @override
+  dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.green.shade100,
+        title: const Text(
+          'CardamomCare',
+          style: TextStyle(fontWeight: FontWeight.w500),
+        ),
+        actions: [
+          Builder(builder: (context) {
+            return IconButton(
+              onPressed: () => Scaffold.of(context).openEndDrawer(),
+              icon: const Icon(Icons.info_outline_rounded),
+            );
+          })
+        ],
+      ),
+      endDrawer: Drawer(
+        shape: const Border(),
+        width: MediaQuery.sizeOf(context).width,
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Powered By'),
+            Image(
+              image: AssetImage('assets/images/tfl_logo.png'),
+              color: Colors.black,
+            ),
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Text(
+                '@tejas-su @abhay_prabhu @jyothis @dayanand_shenoy',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.black26),
+              ),
+            ),
+          ],
+        ),
+      ),
       body: FutureBuilder(
         future: _initializeControllerFuture,
         builder: (context, snapshot) {
