@@ -18,10 +18,16 @@ class ClassifyBloc extends Bloc<ClassifyEvent, ClassifyState> {
         try {
           ClassifyModel output = await helperRepository.pickGalleryImage();
           emit(ClassifiedState(classifyModel: output));
-        } catch (e) { 
+        } catch (e) {
           emit(ErrorState(errormessage: e.toString()));
         }
       },
     );
+  }
+
+  @override
+  Future<void> close() {
+    helperRepository.closeModel();
+    return super.close();
   }
 }
