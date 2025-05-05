@@ -1,0 +1,1 @@
+G:\Flutter projects\cardamom_care\build\app\intermediates\cxx\RelWithDebInfo\3x4h1854\obj\arm64-v8a
