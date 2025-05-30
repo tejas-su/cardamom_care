@@ -32,6 +32,8 @@ CardamomCare is an intelligent agriculture support system designed to assist far
     ``` flutter pub get ```
     ``` flutter build apk ```
 
+Or just download the apk from [here](https://github.com/tejas-su/cardamom_care/releases/download/Release/app-release.apk)
+
 
 ## Screeshots
 <img src="assets/images/merged.png" alt="Upload image and Live feed analysis screen" width="500"/> <img src="assets/images/merged_2.png" alt="Price prediction and Visualization screen analysis screen" width="500"/>
